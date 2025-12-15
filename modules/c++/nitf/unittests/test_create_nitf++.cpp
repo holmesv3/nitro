@@ -50,7 +50,7 @@ CODA_OSS_disable_warning_push
 #include <nitf/../../unittests/nitro_image_.c_>
 CODA_OSS_disable_warning_pop
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
 static void populateFileHeader(nitf::Record& record, const std::string& title)
 {
@@ -233,7 +233,7 @@ static bool test_create_nitf_with_byte_provider__testRead(const std::string& pat
     return true;
 }
 
-TEST_CASE(test_create_nitf_with_byte_provider_test)
+TEST_CASE("test_create_nitf_with_byte_provider_test")
 {
     // We can't actually compress. This is just for illustration.
     const bool shouldCompress = false;
@@ -241,7 +241,7 @@ TEST_CASE(test_create_nitf_with_byte_provider_test)
 
     test_create_nitf_with_byte_provider__testCreate(outname, shouldCompress);
     const auto result = test_create_nitf_with_byte_provider__testRead(outname);
-    TEST_ASSERT(result);
+    CHECK(result);
 }
 
 static void test_create_nitf__addImageSegment(nitf::Record& record, bool isMono = false,
@@ -393,43 +393,43 @@ static bool test_create_nitf__testRead(const std::string& pathname, bool isMono 
     return true;
 }
 
-TEST_CASE(test_create_nitf_test)
+TEST_CASE("test_create_nitf_test")
 {
+    nitf::Test::setNitfPluginPath();
+
     const std::string outname("test_create.nitf");
-
-
     bool shouldCompress = false;
 
     bool isMono = true;
     test_create_nitf__testCreate(outname, isMono, shouldCompress);
     bool result = test_create_nitf__testRead(outname, isMono, shouldCompress);
-    TEST_ASSERT(result);
+    CHECK(result);
 
     isMono = false;
     test_create_nitf__testCreate(outname, isMono, shouldCompress);
     result = test_create_nitf__testRead(outname, isMono, shouldCompress);
-    TEST_ASSERT(result);
+    CHECK(result);
 
     // If we're compressing, we're using the J2K plugin, so please ensure
     // that it is on your NITF_PLUGIN_PATH
     std::string nitf_plugin_path;
     if (sys::OS().getEnvIfSet("NITF_PLUGIN_PATH", nitf_plugin_path))
     {
-        TEST_ASSERT_FALSE(nitf_plugin_path.empty());
+        CHECK_FALSE(nitf_plugin_path.empty());
         shouldCompress = false; // TODO: true
 
         test_create_nitf__testCreate(outname, isMono, shouldCompress);
         result = test_create_nitf__testRead(outname, isMono, shouldCompress);
-        TEST_ASSERT(result);
+        CHECK(result);
 
         isMono = true;
         test_create_nitf__testCreate(outname, isMono, shouldCompress);
         result = test_create_nitf__testRead(outname, isMono, shouldCompress);
-        TEST_ASSERT(result);
+        CHECK(result);
     }
     else
     {
-        TEST_FAIL_MSG("NITF_PLUGIN_PATH not set");
+        FAIL("NITF_PLUGIN_PATH not set");
     }
 }
 
@@ -468,7 +468,7 @@ static void RecordThread_run()
         writer.write();
     }
 
-TEST_CASE(test_mt_record)
+TEST_CASE("test_mt_record")
 {
     constexpr int NTHR = 2;
     
@@ -488,16 +488,8 @@ TEST_CASE(test_mt_record)
     }
     catch (const std::exception&)
     {
-        TEST_ASSERT_TRUE(false);
+        CHECK(false);
     }
 
-    TEST_ASSERT_TRUE(true);
+    CHECK(true);
 }
-
-TEST_MAIN(
-    nitf::Test::setNitfPluginPath();
-
-    TEST_CHECK(test_create_nitf_with_byte_provider_test);
-    TEST_CHECK(test_create_nitf_test);
-    TEST_CHECK(test_mt_record);
-)

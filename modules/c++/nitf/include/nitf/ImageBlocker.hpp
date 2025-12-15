@@ -27,8 +27,8 @@
 #include <stddef.h>
 #include <string.h>
 #include <vector>
-#include <std/span>
-#include <std/cstddef>
+#include <span>
+#include <cstddef>
 
 #include "nitf/coda-oss.hpp"
 #include "types/RowCol.h"

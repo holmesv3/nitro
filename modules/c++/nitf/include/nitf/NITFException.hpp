@@ -87,7 +87,7 @@ class NITFException : public except::Exception
 {
     static except::Context make_Context_(const Error& error, const std::string& message)
     {
-        return except::Context(error.file(), error.line(), error.func(), "", message);
+        return except::Context(error.file().c_str(), error.line(), error.func(), std::string{""}, message);
     }
     static except::Context make_Context(const nitf_Error* pError)
     {

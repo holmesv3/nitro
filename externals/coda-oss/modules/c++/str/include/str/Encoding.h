@@ -34,7 +34,7 @@
 #include <type_traits>
 
 #include "coda_oss/string.h"
-#include "gsl/gsl.h"
+#include "gsl/gsl"
 #include "config/Exports.h"
 #include "str/W1252string.h"
 

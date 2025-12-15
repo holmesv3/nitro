@@ -22,14 +22,17 @@
 
 #include <vector>
 #include <string>
-#include <std/filesystem>
+#include <filesystem>
 
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>
 
 using path = std::filesystem::path;
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
+
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
+#define TEST_ASSERT_NOT_EQ(X, Y) CHECK(X != Y);
 
 static path findInputFile()
 {
@@ -67,8 +70,7 @@ struct expected_values final
     int luts = 0;
 };
 
-static void writeImage(const std::string& testName,
-    nitf::ImageSegment& segment,
+static void writeImage(nitf::ImageSegment& segment,
     nitf::Reader& reader,
     const int imageNumber,
     const std::string& imageName,
@@ -174,8 +176,7 @@ static void writeImage(const std::string& testName,
     }
 }
 
-static void test_image_loading_(const std::string& testName,
-    const std::string& input_file, bool optz, const expected_values& expected)
+static void test_image_loading_(const std::string& input_file, bool optz, const expected_values& expected)
 {
     /* Skip factors */
     uint32_t rowSkipFactor = 1;
@@ -200,13 +201,13 @@ static void test_image_loading_(const std::string& testName,
         nitf::ImageSegment imageSegment(iter.get());
 
         /*  Write the thing out  */
-        writeImage(testName,
+        writeImage(
             imageSegment, reader, count, input_file,
             rowSkipFactor, columnSkipFactor, optz, expected);
     }
 }
 
-TEST_CASE(test_image_loading)
+TEST_CASE("test_image_loading")
 {
     /*  If you didnt give us a nitf file, we're croaking  */
     const auto input_file = findInputFile().string();
@@ -218,11 +219,11 @@ TEST_CASE(test_image_loading)
     expected.pixelsPerHorizBlock = expected.nCols;
     expected.pixelsPerVertBlock = expected.nRows;
 
-    test_image_loading_(testName, input_file, false /*optz*/, expected);
-    test_image_loading_(testName, input_file, true /*optz*/, expected);
+    test_image_loading_(input_file, false /*optz*/, expected);
+    test_image_loading_(input_file, true /*optz*/, expected);
 }
 
-TEST_CASE(test_8bit_image_loading)
+TEST_CASE("test_8bit_image_loading")
 {
     auto input_file = findInputFile(true /*withAmpTable*/).string();
     expected_values expected; // braced-initialization cause CodeQL to fail?
@@ -234,15 +235,10 @@ TEST_CASE(test_8bit_image_loading)
     expected.pixelsPerHorizBlock = expected.nCols;
     expected.pixelsPerVertBlock = expected.nRows;
 
-    test_image_loading_(testName, input_file, false /*optz*/, expected);
-    test_image_loading_(testName, input_file, true /*optz*/, expected);
+    test_image_loading_(input_file, false /*optz*/, expected);
+    test_image_loading_(input_file, true /*optz*/, expected);
 
     input_file = findInputFile(false /*withAmpTable*/).string();
-    test_image_loading_(testName, input_file, false /*optz*/, expected);
-    test_image_loading_(testName, input_file, true /*optz*/, expected);
+    test_image_loading_(input_file, false /*optz*/, expected);
+    test_image_loading_(input_file, true /*optz*/, expected);
 }
-
-TEST_MAIN(
-    TEST_CHECK(test_image_loading);
-    TEST_CHECK(test_8bit_image_loading);
-)

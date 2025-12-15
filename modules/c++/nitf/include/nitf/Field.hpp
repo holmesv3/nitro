@@ -27,7 +27,7 @@
 #include <string>
 #include <limits>
 #include <type_traits>
-#include <std/cstddef> // std::byte
+#include <cstddef> // std::byte
 
 #include <nitf/Field.h>
 

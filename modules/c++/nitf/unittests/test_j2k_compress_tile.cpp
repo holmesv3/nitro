@@ -24,7 +24,7 @@
 #include <cstring>
 #include <iostream>
 #include <numeric>
-#include <std/cstddef>
+#include <cstddef>
 
 #include <sio/lite/FileReader.h>
 #include <sio/lite/ReadUtils.h>
@@ -33,14 +33,14 @@
 #include <io/TempFile.h>
 #include <io/FileOutputStream.h>
 #include <sys/OS.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 #include <import/nrt.h>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/J2KCompressor.hpp>
 #include <nitf/UnitTests.hpp>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
 struct Image final
 {
@@ -179,14 +179,15 @@ static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byt
     return false;
 }
 
-TEST_CASE(j2k_compress_tile)
+TEST_CASE("j2k_compress_tile")
 {
+    nitf::Test::j2kSetNitfPluginPath();
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 
     {
       // be sure equals() is used to avoid compiler warnings
       static const std::vector<std::byte> lhs, rhs;
-      TEST_ASSERT_TRUE(equals(lhs, rhs));
+      CHECK(equals(lhs, rhs));
     }
 
     Image source;
@@ -223,10 +224,4 @@ TEST_CASE(j2k_compress_tile)
         //TEST_ASSERT(equals(imageCompressedWhole, imageCompressedBySubset));
     }
 }
-
-TEST_MAIN(
-    nitf::Test::j2kSetNitfPluginPath();
-
-    TEST_CHECK(j2k_compress_tile);
-    )
 

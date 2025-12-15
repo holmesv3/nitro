@@ -16,7 +16,11 @@
 #include <io/FileInputStream.h>
 #include <io/TempFile.h>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
+
+#define TEST_ASSERT_GREATER_EQ(X, Y) CHECK(X >= Y);
+#define TEST_ASSERT_GREATER(X, Y) CHECK(X > Y);
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
 
 static constexpr int64_t BLOCK_LENGTH = 256;
 static constexpr int64_t ILOC_MAX = 99999;
@@ -155,7 +159,7 @@ void createBuffers(std::vector<std::vector<std::byte> >& buffers,
    }
 }
 
-TEST_CASE(testBlankSegmentsValid)
+TEST_CASE("testBlankSegmentsValid")
 {
    /*
     * This is rather lengthy but will allocate 3 segments 
@@ -251,7 +255,7 @@ TEST_CASE(testBlankSegmentsValid)
             nitf::ImageSubheader subhdr     = seg.getSubheader();
             nitf::ImageReader imageReader   = reader.newImageReader(imgCtr);
             nitf::BlockingInfo blockingInfo = imageReader.getBlockingInfo();
-            TEST_ASSERT_TRUE(imageReader.getMaskInfo(
+            CHECK(imageReader.getMaskInfo(
                                                       imageDataOffset, blockRecordLength,
                                                       padRecordLength, padPixelValueLength,
                                                       padValue, blockMask, padMask) != 0);
@@ -277,7 +281,3 @@ TEST_CASE(testBlankSegmentsValid)
       }
    }
 }
-
-TEST_MAIN(
-TEST_CHECK(testBlankSegmentsValid);
-)

@@ -24,12 +24,12 @@
 
 #include "config/disable_compiler_warnings.h"
 
-#include "import/std.h"
-#include <std/bit>
-#include <std/cstddef>
-#include <std/filesystem>
-#include <std/span>
-#include <std/optional>
+
+#include <bit>
+#include <cstddef>
+#include <filesystem>
+#include <span>
+#include <optional>
 
 CODA_OSS_disable_warning_push
 #if _MSC_VER
@@ -58,7 +58,7 @@ CODA_OSS_disable_warning_push
 #include <import/types.h>
 #include <import/mem.h>
 #include <import/math.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 #include <sys/Span.h>
 #include <import/sio/lite.h>
 

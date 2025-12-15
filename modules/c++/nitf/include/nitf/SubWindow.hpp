@@ -25,12 +25,12 @@
 #include <string>
 #include <vector>
 
-#include <std/optional>
+#include <optional>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include "gsl/gsl.h"
+#include "gsl/gsl"
 
 /*!
  *  \file SubWindow.hpp

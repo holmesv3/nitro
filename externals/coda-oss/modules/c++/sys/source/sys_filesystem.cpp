@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "sys/Path.h"
-#include "gsl/gsl.h"
+#include "gsl/gsl"
 
 namespace fs = sys::filesystem;
 

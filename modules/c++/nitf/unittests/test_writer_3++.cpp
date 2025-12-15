@@ -23,9 +23,9 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include <std/filesystem>
+#include <filesystem>
 
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>

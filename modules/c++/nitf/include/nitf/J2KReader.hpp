@@ -26,8 +26,8 @@
 #pragma once
 
 #include <memory>
-#include <std/filesystem>
-#include <std/span>
+#include <filesystem>
+#include <span>
 
 #include "j2k/j2k_Reader.h"
 

@@ -21,7 +21,7 @@
  *
  */
 
-#include <std/memory>
+#include <memory>
 
 #include <mem/ScopedCloneablePtr.h>
 

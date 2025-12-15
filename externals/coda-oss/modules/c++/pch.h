@@ -33,7 +33,7 @@ CODA_OSS_disable_warning_system_header_push
 
 CODA_OSS_disable_warning_pop
 
-#include "import/std.h"
+
 
 
 #include <net/net_config.h>
@@ -106,7 +106,7 @@ CODA_OSS_disable_warning_pop
 
 // Yes, these are our files ... but they don't change very often, and if they do
 // change we want to rebuild everything anyway.
-#include "gsl/gsl.h"
+#include "gsl/gsl"
 #include "config/Exports.h"
 #include "mem/SharedPtr.h"
 #include "sys/filesystem.h"

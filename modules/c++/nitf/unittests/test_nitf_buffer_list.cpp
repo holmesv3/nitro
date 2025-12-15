@@ -22,11 +22,13 @@
 
 #include <string.h>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
+
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
 
 #include <nitf/NITFBufferList.hpp>
 
-TEST_CASE(testGetNumBlocks)
+TEST_CASE("testGetNumBlocks")
 {
     // 5000 total bytes
     nitf::NITFBufferList bufferList;
@@ -42,7 +44,7 @@ TEST_CASE(testGetNumBlocks)
     TEST_ASSERT_EQ(bufferList.getNumBlocks(999), static_cast<size_t>(5));
 }
 
-TEST_CASE(testGetBlock_sys_byte)
+TEST_CASE("testGetBlock_sys_byte")
 {
     // 100 total bytes
     std::vector<sys::byte> buffer(100);
@@ -104,12 +106,12 @@ TEST_CASE(testGetBlock_sys_byte)
             TEST_ASSERT_EQ(extracted_ii, buffer_ii);
         }
 
-        TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,
+        CHECK_THROWS(bufferList.getBlock(blockSize, numBlocks, scratch,
                                            numBytesInBlock));
     }
 }
 
-TEST_CASE(testGetBlock_std_byte)
+TEST_CASE("testGetBlock_std_byte")
 {
     // 100 total bytes
     std::vector<std::byte> buffer(100);
@@ -171,13 +173,7 @@ TEST_CASE(testGetBlock_std_byte)
             TEST_ASSERT_EQ(extracted_ii, buffer_ii);
         }
 
-        TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,
+        CHECK_THROWS(bufferList.getBlock(blockSize, numBlocks, scratch,
             numBytesInBlock));
     }
 }
-
-TEST_MAIN(
-    TEST_CHECK(testGetNumBlocks);
-    TEST_CHECK(testGetBlock_sys_byte);
-    TEST_CHECK(testGetBlock_std_byte);
-    )

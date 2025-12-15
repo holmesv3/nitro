@@ -3,7 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * © Copyright 2023, Maxar Technologies, Inc.
+ * ï¿½ Copyright 2023, Maxar Technologies, Inc.
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

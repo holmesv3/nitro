@@ -28,7 +28,7 @@
 #include <map>
 #include <mutex>
 
-#include <std/memory>
+#include <memory>
 #include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 

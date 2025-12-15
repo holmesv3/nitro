@@ -27,9 +27,11 @@
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageBlocker.hpp>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
+#define TEST_ASSERT_NOT_NULL(X) CHECK(X != nullptr);
 
-TEST_CASE(testBlockSizedBoundaries)
+TEST_CASE("testBlockSizedBoundaries")
 {
     // This test is meant to run through a lot of cases just to make sure
     // we never have a segment that is not a multiple of the block size.
@@ -95,7 +97,7 @@ TEST_CASE(testBlockSizedBoundaries)
 
 }
 
-TEST_CASE(testPerfectSplitting)
+TEST_CASE("testPerfectSplitting")
 {
     // This will split into two perfectly sized segments.
     const size_t blockSize = 1024;
@@ -123,7 +125,7 @@ TEST_CASE(testPerfectSplitting)
     TEST_ASSERT_EQ(segments[1].numRows, ilocBlockSizeMultiple);
 }
 
-TEST_CASE(testOneRowOver)
+TEST_CASE("testOneRowOver")
 {
     const size_t blockSize = 1024;
 
@@ -159,7 +161,7 @@ static size_t ceilingDivide(size_t numerator, size_t denominator)
     return (numerator / denominator) + (numerator % denominator != 0);
 }
 
-TEST_CASE(testKnownCase)
+TEST_CASE("testKnownCase")
 {
     // This tests a known case that was segmenting with too many rows
     // before the update was put in place to for image segments to be
@@ -212,12 +214,3 @@ TEST_CASE(testKnownCase)
     }
 
 }
-
-
-TEST_MAIN
-(
-    TEST_CHECK(testBlockSizedBoundaries);
-    TEST_CHECK(testPerfectSplitting);
-    TEST_CHECK(testOneRowOver);
-    TEST_CHECK(testKnownCase);
-    )

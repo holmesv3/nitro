@@ -20,8 +20,8 @@
  *
  */
 
-#include <std/string>
-#include <std/span>
+#include <string>
+#include <span>
 #include "coda_oss/CPlusPlus.h"
 #include "io/StringStream.h"
 #include <TestCase.h>

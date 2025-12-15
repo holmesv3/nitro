@@ -22,7 +22,7 @@
  */
 #include "nitf/Handle.hpp"
 
-#include <std/memory>
+#include <memory>
 
 class nitf::Handle::Impl
 {

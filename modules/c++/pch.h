@@ -1,6 +1,6 @@
 #pragma once
 
-#include "coda_oss/CPlusPlus.h"
+
 #include "config/disable_compiler_warnings.h"
 
 CODA_OSS_disable_warning_system_header_push
@@ -17,12 +17,12 @@ CODA_OSS_disable_warning_system_header_push
 
 CODA_OSS_disable_warning_pop
 
-#include "import/std.h"
-#include <std/bit>
-#include <std/cstddef>
-#include <std/filesystem>
-#include <std/span>
-#include <std/optional>
+
+#include <bit>
+#include <cstddef>
+#include <filesystem>
+#include <span>
+#include <optional>
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #define NOMINMAX

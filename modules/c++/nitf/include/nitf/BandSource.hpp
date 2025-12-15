@@ -25,8 +25,8 @@
 
 #include <string.h>
 #include <string>
-#include <std/span>
-#include <std/cstddef>
+#include <span>
+#include <cstddef>
 
 #include "nitf/BandSource.h"
 #include "nitf/RowSource.h"

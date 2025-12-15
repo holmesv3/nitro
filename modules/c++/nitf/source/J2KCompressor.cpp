@@ -33,19 +33,19 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include <std/span>
+#include <span>
 #include <iterator>
-#include <std/memory>
-#include <std/cstddef> // std::byte
+#include <memory>
+#include <cstddef> // std::byte
 #include <stdexcept>
 #include <limits>
 #include <sstream>
 #include <vector>
 #include <algorithm>
-#include <std/span>
+#include <span>
 #include <iterator>
 
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 #include <except/Exception.h>
 #include <sys/Conf.h>
 #include <io/ByteStream.h>
@@ -57,7 +57,7 @@
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 #include <except/Exception.h>
 #include <sys/Conf.h>
 #include <mem/ScopedArray.h>

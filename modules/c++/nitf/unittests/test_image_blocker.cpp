@@ -25,9 +25,11 @@
 
 #include <nitf/ImageBlocker.hpp>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
-TEST_CASE(testSingleSegmentNoLeftovers)
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
+
+TEST_CASE("testSingleSegmentNoLeftovers")
 {
     // 4 rows of blocks and 5 cols of blocks
     static const size_t NUM_ROWS = 12;
@@ -69,21 +71,17 @@ TEST_CASE(testSingleSegmentNoLeftovers)
             {
                 for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
                 {
-                    std::ostringstream ostr;
-                    ostr << "Row block " << rowBlock << ", col block "
-                         << colBlock << ", row " << row << ", col " << col;
-
                     const size_t expectedVal =
                             rowOffset + row * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    CHECK(output[idx] == expectedVal);
                 }
             }
         }
     }
 }
 
-TEST_CASE(testSingleSegmentPadCols)
+TEST_CASE("testSingleSegmentPadCols")
 {
     // 4 rows of blocks and 3 cols of blocks with 1 pad col
     static const size_t NUM_ROWS = 12;
@@ -125,21 +123,17 @@ TEST_CASE(testSingleSegmentPadCols)
             {
                 for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
                 {
-                    std::ostringstream ostr;
-                    ostr << "Row block " << rowBlock << ", col block "
-                         << colBlock << ", row " << row << ", col " << col;
-
                     const size_t expectedVal = (colOffset + col >= NUM_COLS) ?
                             0 : rowOffset + row * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    CHECK(output[idx] == expectedVal);
                 }
             }
         }
     }
 }
 
-TEST_CASE(testSingleSegmentPadRowsAndPadCols)
+TEST_CASE("testSingleSegmentPadRowsAndPadCols")
 {
     // 2 rows of blocks and 3 cols of blocks with 4 pad rows and 1 pad col
     static const size_t NUM_ROWS = 12;
@@ -181,24 +175,20 @@ TEST_CASE(testSingleSegmentPadRowsAndPadCols)
             {
                 for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
                 {
-                    std::ostringstream ostr;
-                    ostr << "Row block " << rowBlock << ", col block "
-                         << colBlock << ", row " << row << ", col " << col;
-
                     const size_t expectedVal =
                             (rowBlock * NUM_ROWS_PER_BLOCK + row >= NUM_ROWS ||
                              colOffset + col >= NUM_COLS) ?
                                     0 :
                                     rowOffset + row * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    CHECK(output[idx] == expectedVal);
                 }
             }
         }
     }
 }
 
-TEST_CASE(testMultipleSegmentsNoLeftovers)
+TEST_CASE("testMultipleSegmentsNoLeftovers")
 {
     // 4 rows of blocks and 5 cols of blocks
     static const size_t NUM_ROWS = 12;
@@ -245,21 +235,17 @@ TEST_CASE(testMultipleSegmentsNoLeftovers)
             {
                 for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
                 {
-                    std::ostringstream ostr;
-                    ostr << "Row block " << rowBlock << ", col block "
-                         << colBlock << ", row " << row << ", col " << col;
-
                     const size_t expectedVal =
                             rowOffset + row * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    CHECK(output[idx] == expectedVal);
                 }
             }
         }
     }
 }
 
-TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundaries)
+TEST_CASE("testMultipleSegmentsPartialRowsOnSegmentBoundaries")
 {
     // 5 rows of blocks (because of segment layout) and 5 cols of blocks
     static const size_t NUM_ROWS = 12;
@@ -313,14 +299,10 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundaries)
 
                 for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
                 {
-                    std::ostringstream ostr;
-                    ostr << "Row block " << rowBlock << ", col block "
-                         << colBlock << ", row " << row << ", col " << col;
-
                     const size_t expectedVal = padRow ?
                             0 : 1 + imageRow * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    CHECK(output[idx] == expectedVal);
                 }
 
                 if (!padRow)
@@ -334,7 +316,7 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundaries)
     }
 }
 
-TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols)
+TEST_CASE("testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols")
 {
     // 5 rows of blocks (because of segment layout) and 3 cols of blocks with 1
     // pad col
@@ -398,7 +380,7 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols)
                                     0 :
                                     1 + imageRow * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    CHECK(output[idx] == expectedVal);
                 }
 
                 if (!padRow)
@@ -412,7 +394,7 @@ TEST_CASE(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols)
     }
 }
 
-TEST_CASE(testBlockPartialImage)
+TEST_CASE("testBlockPartialImage")
 {
     // 7 rows of blocks and 5 cols of blocks
     static const size_t NUM_ROWS = 21;
@@ -460,26 +442,12 @@ TEST_CASE(testBlockPartialImage)
             {
                 for (size_t col = 0; col < NUM_COLS_PER_BLOCK; ++col, ++idx)
                 {
-                    std::ostringstream ostr;
-                    ostr << "Row block " << rowBlock << ", col block "
-                         << colBlock << ", row " << row << ", col " << col;
-
                     const size_t expectedVal =
                             rowOffset + row * NUM_COLS + colOffset + col;
 
-                    TEST_ASSERT_EQ_MSG(ostr.str(), output[idx], expectedVal);
+                    TEST_ASSERT_EQ(output[idx], expectedVal);
                 }
             }
         }
     }
 }
-
-TEST_MAIN(
-    TEST_CHECK(testSingleSegmentNoLeftovers);
-    TEST_CHECK(testSingleSegmentPadCols);
-    TEST_CHECK(testSingleSegmentPadRowsAndPadCols);
-    TEST_CHECK(testMultipleSegmentsNoLeftovers);
-    TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundaries);
-    TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols);
-    TEST_CHECK(testBlockPartialImage);
-    )

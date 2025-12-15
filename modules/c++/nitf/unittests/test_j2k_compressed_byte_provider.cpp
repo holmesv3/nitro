@@ -30,12 +30,12 @@
 #include <limits>
 #include <vector>
 #include <memory>
-#include <std/cstddef>
-#include <std/filesystem>
-#include <std/optional>
+#include <cstddef>
+#include <filesystem>
+#include <optional>
 
 #include <types/RowCol.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 #include <io/FileOutputStream.h>
 #include <io/ReadUtils.h>
 #include <math/Round.h>
@@ -52,7 +52,7 @@
 #include <nitf/Writer.hpp>
 #include <nitf/UnitTests.hpp>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
 static void setCornersFromDMSBox(nitf::ImageSubheader& header)
 {
@@ -555,7 +555,7 @@ private:
         }
     }
 
-private:
+public:
     const std::filesystem::path mNormalPathname;
     const EnsureFileCleanup mNormalFileCleanup;
 
@@ -586,56 +586,50 @@ static Tester<uint8_t> make_Tester(bool setBlocking, std::optional<size_t> maxRo
     return Tester<uint8_t>(numRowsPerBlock, numColsPerBlock, setMaxProductSize, maxRowsPerSegment_);
 }
 
-TEST_CASE(j2k_compressed_byte_provider_maxRowsPerSegment0)
+TEST_CASE("j2k_compressed_byte_provider_maxRowsPerSegment0")
 {
-    {
-        auto tester = make_Tester(true /*setBlocking*/);
-        tester.testMultipleWritesBlocked();
-        TEST_ASSERT_TRUE(tester.success());
-        tester.testSingleWrite();
-        TEST_ASSERT_TRUE(tester.success());
-    }
-    {
-        auto tester = make_Tester(false /*setBlocking*/);
-        tester.testSingleWrite();
-        TEST_ASSERT_TRUE(tester.success());
-    }
+    SKIP();
+//     {
+//         auto tester = make_Tester(true /*setBlocking*/);
+//         tester.testMultipleWritesBlocked();
+//         CHECK(tester.success());
+//         tester.testSingleWrite();
+//         CHECK(tester.success());
+//     }
+//     {
+//         auto tester = make_Tester(false /*setBlocking*/);
+//         tester.testSingleWrite();
+//         CHECK(tester.success());
+//     }
 }
 
-TEST_CASE(j2k_compressed_byte_provider)
+TEST_CASE("j2k_compressed_byte_provider")
 {
-    // Run tests forcing various numbers of segments
-    // Blocking is set at 40 rows / block so can't go less than this
-    // Actual limit is a bit higher, since j2k needs a minimum size
-    const auto numRows = { 100, 80, 50 };
-    for (auto maxRowsPerSegment_ : numRows)
-    {
-        const auto maxRowsPerSegment = gsl::narrow<size_t>(maxRowsPerSegment_);
-        {
-            auto tester = make_Tester(true /*setBlocking*/, maxRowsPerSegment);
-            tester.testMultipleWritesBlocked();
-            TEST_ASSERT_TRUE(tester.success());
-            tester.testSingleWrite();
-            TEST_ASSERT_TRUE(tester.success());
-        }
-        {
-            auto tester = make_Tester(false /*setBlocking*/, maxRowsPerSegment);
-            tester.testSingleWrite();
-            TEST_ASSERT_TRUE(tester.success());
-        }
-    }
+    SKIP();
+//     // Run tests forcing various numbers of segments
+//     // Blocking is set at 40 rows / block so can't go less than this
+//     // Actual limit is a bit higher, since j2k needs a minimum size
+//     const auto numRows = { 100, 80, 50 };
+//     for (auto maxRowsPerSegment_ : numRows)
+//     {
+//         const auto maxRowsPerSegment = gsl::narrow<size_t>(maxRowsPerSegment_);
+//         {
+//             auto tester = make_Tester(true /*setBlocking*/, maxRowsPerSegment);
+//             tester.testMultipleWritesBlocked();
+//             CHECK(tester.success());
+//             tester.testSingleWrite();
+//             CHECK(tester.success());
+//         }
+//         {
+//             auto tester = make_Tester(false /*setBlocking*/, maxRowsPerSegment);
+//             tester.testSingleWrite();
+//             CHECK(tester.success());
+//         }
+//     }
 }
 
-TEST_CASE(j2k_do_nothing)
+TEST_CASE("j2k_do_nothing")
 {
-    /* placeholder */
-    TEST_ASSERT_TRUE(true);
+    /* placeholder so that this "passes" even though we're skipping the real tests*/
+    SUCCEED();
 }
-
-TEST_MAIN(
-    nitf::Test::j2kSetNitfPluginPath();
-
-    TEST_CHECK(j2k_do_nothing);
-//TEST_CHECK(j2k_compressed_byte_provider_maxRowsPerSegment0); // TODO: get working with CMake
-//TEST_CHECK(j2k_compressed_byte_provider); // TODO: get working with CMake
-)

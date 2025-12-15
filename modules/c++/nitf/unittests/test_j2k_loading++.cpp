@@ -26,15 +26,15 @@
 
 #include <vector>
 #include <string>
-#include <std/filesystem>
-#include <std/span>
-#include <std/cstddef>
+#include <filesystem>
+#include <span>
+#include <cstddef>
 #include <iostream>
 #include <string>
 #include <algorithm>
 #include <numeric>
 
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 #include <str/Format.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
@@ -57,7 +57,9 @@
 #include <nitf/J2KCompressor.hpp>
 #include <nitf/UnitTests.hpp>
 
-#include <TestCase.h>
+#include <catch2/catch_test_macros.hpp>
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
+#define TEST_ASSERT_GREATER(X, Y) CHECK(X > Y);
 
 static auto findInputFile(const std::filesystem::path& fn)
 {
@@ -95,7 +97,7 @@ static void test_image_loading_(const std::string& input_file, bool /*optz*/)
     }
 }
 
-TEST_CASE(test_j2k_loading)
+TEST_CASE("test_j2k_loading")
 {
     const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
     test_image_loading_(input_file, false /*optz*/);
@@ -107,16 +109,15 @@ TEST_CASE(test_j2k_loading)
     //input_file = findInputFile("xxxx_MSI.nitf").string();
     //test_image_loading_(input_file, false /*optz*/);
 
-    TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
+    SUCCEED();
 }
 
-static void test_j2k_nitf_(const std::string& testName,
-    const std::string& fname)
+static void test_j2k_nitf_(const std::string& fname)
 {
     nitf::IOHandle io(fname);
     nitf::Reader reader;
     const auto version = reader.getNITFVersion(io);
-    TEST_ASSERT(version != NITF_VER_UNKNOWN);
+    CHECK(version != NITF_VER_UNKNOWN);
 
     const auto record = reader.readIO(io);
     const auto images = record.getImages();
@@ -142,27 +143,27 @@ static void test_j2k_nitf_(const std::string& testName,
 
         auto buf = j2k::make_Buffer();
         const auto result = j2kReader.readRegion(0, 0, width, height, buf);
-        TEST_ASSERT(result.size() != 0);
-        TEST_ASSERT(buf.get() != nullptr);
-        TEST_ASSERT(buf.get() == result.data());
+        CHECK(result.size() != 0);
+        CHECK(buf.get() != nullptr);
+        CHECK(buf.get() == result.data());
     }
 }
-TEST_CASE(test_j2k_nitf)
+TEST_CASE("test_j2k_nitf")
 {
     j2k_Reader* pNative = nullptr;
     try
     {
         j2k::Reader j2kReader(std::move(pNative));
-        TEST_ASSERT(false);
+        CHECK(false);
     }
     catch (const nitf::NITFException&)
     {
-        TEST_ASSERT(true);
+        CHECK(true);
     }
 
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
-    test_j2k_nitf_(testName, input_file);
+    test_j2k_nitf_(input_file);
 }
 
 void writeFile(uint32_t x0, uint32_t y0,
@@ -207,13 +208,12 @@ void writeJ2K(uint32_t x0, uint32_t y0,
     writer.write(outIO);
     //printf("Wrote file: %s\n", outName.c_str());
 }
-void test_j2k_nitf_read_region_(const std::string& testName,
-    const std::filesystem::path& fname)
+void test_j2k_nitf_read_region_(const std::filesystem::path& fname)
 {
     nitf::IOHandle io(fname.string(), NRT_ACCESS_READONLY, NRT_OPEN_EXISTING);
     nitf::Reader reader;
     const auto version = reader.getNITFVersion(io);
-    TEST_ASSERT(version != NITF_VER_UNKNOWN);
+    CHECK(version != NITF_VER_UNKNOWN);
 
     const auto record = reader.readIO(io);
     const auto images = record.getImages();
@@ -279,17 +279,16 @@ void test_j2k_nitf_read_region_(const std::string& testName,
         writeJ2K(0, 0, width, height, result, container, namePrefix);
     }
 }
-TEST_CASE(test_j2k_nitf_read_region)
+TEST_CASE("test_j2k_nitf_read_region")
 {
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
-    test_j2k_nitf_read_region_(testName, input_file);
+    test_j2k_nitf_read_region_(input_file);
 
-    TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
+    SUCCEED();
 }
 
-static std::vector<std::byte> readImage(const std::string& testName,
-    nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
+static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
 {
     const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
     TEST_ASSERT_GREATER(static_cast<int64_t>(numBlocks), 0);
@@ -305,14 +304,13 @@ static std::vector<std::byte> readImage(const std::string& testName,
     {
         uint64_t bytesRead;
         const auto blockData = imageReader.readBlock(block, &bytesRead);
-        TEST_ASSERT(blockData != nullptr);
+        CHECK(blockData != nullptr);
         memcpy(retval.data() + byteOffset, blockData, bytesRead);
         byteOffset += bytesRead;
     }
     return retval;
 }
-static void test_decompress_nitf_to_sio_(const std::string& testName,
-    const std::filesystem::path& inputPathname, const std::filesystem::path& outputPathname)
+static void test_decompress_nitf_to_sio_(const std::filesystem::path& inputPathname, const std::filesystem::path& outputPathname)
 {
     // Take a J2K-compressed NITF, decompress the image and save to an SIO.
     nitf::Reader reader;
@@ -323,28 +321,28 @@ static void test_decompress_nitf_to_sio_(const std::string& testName,
     const auto imageSubheader = imageSegment.getSubheader();
 
     auto imageReader = reader.newImageReader(0 /*imageSegmentNumber*/);
-    const auto imageData = readImage(testName, imageReader, imageSubheader);
+    const auto imageData = readImage(imageReader, imageSubheader);
 
-    const sys::filesystem::path outputPathname_ = outputPathname.string();
+    const std::filesystem::path outputPathname_ = outputPathname.string();
     sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname_);
 }
-TEST_CASE(test_j2k_decompress_nitf_to_sio)
+TEST_CASE("test_j2k_decompress_nitf_to_sio")
 {
     nitf::Test::j2kSetNitfPluginPath();
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    test_decompress_nitf_to_sio_(testName, inputPathname, "test_decompress_nitf.sio");
+    test_decompress_nitf_to_sio_(inputPathname, "test_decompress_nitf.sio");
 
-    TEST_ASSERT_TRUE(true); // be sure hidden "testName" parameter is used
+    SUCCEED();
 }
 
-TEST_CASE(test_j2k_compress_raw_image)
+TEST_CASE("test_j2k_compress_raw_image")
 {
     nitf::Test::j2kSetNitfPluginPath();
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const std::filesystem::path outputPathname = "test_j2k_compress_raw_image.sio";
-    test_decompress_nitf_to_sio_(testName, inputPathname, outputPathname);
+    test_decompress_nitf_to_sio_(inputPathname, outputPathname);
     // ---------------------------------------------------------------------------------------
 
     // J2K compresses the raw image data of an SIO file
@@ -382,12 +380,3 @@ TEST_CASE(test_j2k_compress_raw_image)
     //  //TEST_ASSERT_EQ(j2kData[ii], compressedImage[ii]);
     //}
 }
-
-TEST_MAIN(
-    TEST_CHECK(test_j2k_loading);
-    TEST_CHECK(test_j2k_nitf);
-    TEST_CHECK(test_j2k_nitf_read_region);
-
-    TEST_CHECK(test_j2k_decompress_nitf_to_sio);
-    TEST_CHECK(test_j2k_compress_raw_image);
-    )

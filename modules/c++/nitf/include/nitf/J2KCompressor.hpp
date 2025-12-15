@@ -25,15 +25,15 @@
 #define NITF_J2KCompressor_hpp_INCLUDED_
 #pragma once
 
-#include <std/cstddef> // std::byte
+#include <cstddef> // std::byte
 #include <vector>
-#include <std/span>
+#include <span>
 
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 #include <types/Range.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 #include "nitf/exports.hpp"
 #include "nitf/J2KCompressionParameters.hpp"

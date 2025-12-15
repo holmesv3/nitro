@@ -22,9 +22,9 @@
 
 #include <algorithm>
 #include <iterator>
-#include <std/filesystem>
-#include <std/memory>
-#include <std/string>
+#include <filesystem>
+#include <memory>
+#include <string>
 #include <regex>
 #include <tuple> // std::ignore
 

@@ -25,7 +25,7 @@
 
 #include <stdexcept>
 #include <tuple>
-#include <std/string>
+#include <string>
 
 #include <import/str.h>
 #include <import/mem.h>

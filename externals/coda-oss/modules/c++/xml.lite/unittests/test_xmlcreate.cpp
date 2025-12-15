@@ -21,8 +21,8 @@
  */
 
 #include <tuple>
-#include <std/string>
-#include <std/filesystem>
+#include <string>
+#include <filesystem>
 
 #include "io/StringStream.h"
 #include <TestCase.h>

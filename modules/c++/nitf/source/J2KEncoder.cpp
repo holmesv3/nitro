@@ -25,11 +25,11 @@
 
 #include <sstream>
 #include <cmath>
-#include <std/memory>
+#include <memory>
 
 #include <except/Exception.h>
 #include <sys/Conf.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 #undef min
 #undef max

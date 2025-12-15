@@ -20,7 +20,7 @@
  *
  */
 
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 #include "nitf/ImageReader.hpp"
 

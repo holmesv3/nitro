@@ -1,11 +1,13 @@
 #include <string>
-#include <std/filesystem>
+#include <filesystem>
 
 #include <import/nitf.h>
 #include <nitf/UnitTests.hpp>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
+#define TEST_ASSERT_NOT_NULL(X) CHECK(X != nullptr);
 // this is mostly C with just a touch of C++
 #undef NULL
 #define NULL nullptr
@@ -105,7 +107,7 @@ static const char* findInputFile(const char* name)
     return retval.c_str();
 }
 
-TEST_CASE(test_nitf_Record_unmergeTREs_crash)
+TEST_CASE("test_nitf_Record_unmergeTREs_crash")
 {
     const char* input_file = findInputFile("bug2_crash.ntf");
 
@@ -114,7 +116,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     /*  We need to make a reader so we can parse the NITF */
@@ -129,7 +131,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
     nitf_IOHandle output = nitf_IOHandle_create("bug2_crash_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
     if (NITF_INVALID_HANDLE(output))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     nitf_Writer* writer = nitf_Writer_construct(&error);
@@ -140,10 +142,10 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);
 
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 }
 
-TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
+TEST_CASE("test_nitf_Record_unmergeTREs_hangs")
 {
     const char* input_file = findInputFile("bug6_hangs.ntf");
 
@@ -152,7 +154,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     /*  We need to make a reader so we can parse the NITF */
@@ -167,7 +169,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
     nitf_IOHandle output = nitf_IOHandle_create("bug6_hangs_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
     if (NITF_INVALID_HANDLE(output))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     nitf_Writer* writer = nitf_Writer_construct(&error);
@@ -179,10 +181,10 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);
 
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 }
 
-TEST_CASE(test_defaultRead_crash)
+TEST_CASE("test_defaultRead_crash")
 {
     const char* input_file = findInputFile("bug3_crash.ntf");
 
@@ -191,7 +193,7 @@ TEST_CASE(test_defaultRead_crash)
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     /*  We need to make a reader so we can parse the NITF */
@@ -200,15 +202,15 @@ TEST_CASE(test_defaultRead_crash)
 
     /*  This parses all header data within the NITF  */
     (void)nitf_Reader_read(reader, io, &error);
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 
     nitf_IOHandle_close(io);
     nitf_Reader_destruct(&reader);
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 }
 
 
-TEST_CASE(test_readBandInfo_crash)
+TEST_CASE("test_readBandInfo_crash")
 {
     const char* input_file = findInputFile("bug4_crash.ntf");
 
@@ -217,7 +219,7 @@ TEST_CASE(test_readBandInfo_crash)
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     /*  We need to make a reader so we can parse the NITF */
@@ -226,10 +228,10 @@ TEST_CASE(test_readBandInfo_crash)
 
     /*  This parses all header data within the NITF  */
     (void) nitf_Reader_read(reader, io, &error);
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 }
 
-TEST_CASE(test_readRESubheader_crash)
+TEST_CASE("test_readRESubheader_crash")
 {
     const char* input_file = findInputFile("bug5_crash.ntf");
 
@@ -238,7 +240,7 @@ TEST_CASE(test_readRESubheader_crash)
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     /*  We need to make a reader so we can parse the NITF */
@@ -247,10 +249,10 @@ TEST_CASE(test_readRESubheader_crash)
 
     /*  This parses all header data within the NITF  */
     (void)nitf_Reader_read(reader, io, &error);
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 }
 
-TEST_CASE(test_nitf_CSEXRB_bugfix)
+TEST_CASE("test_nitf_CSEXRB_bugfix")
 {
     const char* input_file = findInputFile("TEST_CSEXRB.nitf");
 
@@ -259,7 +261,7 @@ TEST_CASE(test_nitf_CSEXRB_bugfix)
         NITF_OPEN_EXISTING, &error);
     if (NITF_INVALID_HANDLE(io))
     {
-        TEST_ASSERT_FALSE(true);
+        FAIL();
     }
 
     /*  We need to make a reader so we can parse the NITF */
@@ -274,13 +276,3 @@ TEST_CASE(test_nitf_CSEXRB_bugfix)
     nitf_Record_destruct(&record);
     nitf_Reader_destruct(&reader);
 }
-
-TEST_MAIN(
-TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
-TEST_CHECK(test_defaultRead_crash); // 3
-TEST_CHECK(test_readBandInfo_crash); // 4
-TEST_CHECK(test_readRESubheader_crash); // 5
-TEST_CHECK(test_nitf_Record_unmergeTREs_hangs); // 6
-
-TEST_CHECK(test_nitf_CSEXRB_bugfix);
-)

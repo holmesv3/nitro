@@ -27,7 +27,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 #include "nitf/coda-oss.hpp"
 

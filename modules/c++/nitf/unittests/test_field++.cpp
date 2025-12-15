@@ -23,9 +23,11 @@
 #include <nitf/Field.hpp>
 #include <nitf/TestingTest.hpp>
 #include <nitf/FieldDescriptor.hpp>
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
-TEST_CASE(testCastOperator)
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
+
+TEST_CASE("testCastOperator")
 {
     nitf::Field field(20, nitf::Field::BCS_A);
 
@@ -96,7 +98,7 @@ TEST_CASE(testCastOperator)
     const std::string valStr = field;
     TEST_ASSERT_EQ(valStr, std::string("ABCxyz              "));
 }
-TEST_CASE(testDescriptors)
+TEST_CASE("testDescriptors")
 {
     nitf::testing::Test1a test1a;
     test1a.setF1("1234");
@@ -111,8 +113,3 @@ TEST_CASE(testDescriptors)
         TEST_ASSERT_EQ(std::string("1234"), value);
     }
 }
-
-TEST_MAIN(
-    TEST_CHECK(testCastOperator);
-    TEST_CHECK(testDescriptors);
-    )

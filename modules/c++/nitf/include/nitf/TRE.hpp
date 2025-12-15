@@ -26,7 +26,7 @@
 
 #include <string>
 #include <cstddef>
-#include <std/type_traits>
+#include <type_traits>
 #include <stdexcept>
 #include <utility>
 

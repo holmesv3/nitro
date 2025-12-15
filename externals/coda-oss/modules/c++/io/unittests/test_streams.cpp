@@ -20,8 +20,8 @@
  *
  */
 
-#include <std/span>
-#include <std/cstddef>
+#include <span>
+#include <cstddef>
 
 #include <import/io.h>
 #include <mem/BufferView.h>

@@ -22,7 +22,7 @@
 
 #include "nitf/DESubheader.hpp"
 
-#include "gsl/gsl.h"
+#include "gsl/gsl"
 
 using namespace nitf;
 

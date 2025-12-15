@@ -26,8 +26,8 @@
 #include <vector>
 #include <utility>
 #include <memory>
-#include <std/span>
-#include <std/cstddef>
+#include <span>
+#include <cstddef>
 
 #include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>

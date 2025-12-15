@@ -30,8 +30,8 @@
 #include <vector>
 #include <string>
 
-#include <std/span>
-#include <std/cstddef> // std::byte
+#include <span>
+#include <cstddef> // std::byte
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"

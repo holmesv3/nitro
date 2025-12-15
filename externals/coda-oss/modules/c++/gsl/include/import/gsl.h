@@ -25,6 +25,6 @@
 #define CODA_OSS_import_gsl_h_INCLUDED_
 #pragma once
 
-#include "gsl/gsl.h"
+#include "gsl/gsl"
 
 #endif // CODA_OSS_import_gsl_h_INCLUDED_

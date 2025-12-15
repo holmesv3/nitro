@@ -26,7 +26,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
-#include <std/filesystem>
+#include <filesystem>
 
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
@@ -34,7 +34,9 @@
 #include <nitf/Record.hpp>
 #include <nitf/UnitTests.hpp>
 
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
+
+#define TEST_ASSERT_EQ(X, Y) CHECK(X == Y);
 
 using path = std::filesystem::path;
 
@@ -65,13 +67,13 @@ static void doChangeFileHeader(const std::string& inputPathname, const std::stri
     writer.write();
 }
 
-TEST_CASE(imageWriterThrowsOnFailedConstruction)
+TEST_CASE("imageWriterThrowsOnFailedConstruction")
 {
     nitf::ImageSubheader subheader;
-    TEST_EXCEPTION(nitf::ImageWriter(subheader));
+    CHECK_THROWS(nitf::ImageWriter(subheader));
 }
 
-TEST_CASE(constructValidImageWriter)
+TEST_CASE("constructValidImageWriter")
 {
     nitf::Record record;
     nitf::ImageSegment segment = record.newImageSegment();
@@ -80,15 +82,13 @@ TEST_CASE(constructValidImageWriter)
     subheader.setPixelInformation(nitf::PixelValueType::Integer, 8, 8, "R", nitf::ImageRepresentation::MONO, "VIS", bands);
     subheader.setBlocking(100, 200, 10, 10, nitf::BlockingMode::Pixel);
     nitf::ImageWriter writer(subheader);
-
-    TEST_ASSERT_TRUE(true); // need to reference hidden "testName" parameter
 }
 
-TEST_CASE(changeFileHeader)
+TEST_CASE("changeFileHeader")
 {
     static const auto tests = std::filesystem::path("modules") / "c++" / "nitf" / "tests";
     static const auto inputPathname_ = nitf::Test::findInputFile(tests, "test_blank.ntf");
-    TEST_ASSERT_TRUE(is_regular_file(inputPathname_));
+    CHECK(is_regular_file(inputPathname_));
 	static const auto inputPathname = inputPathname_.string();
     constexpr auto outputPathname = "outputPathname.ntf";
 
@@ -103,11 +103,5 @@ TEST_CASE(changeFileHeader)
     auto npos = fileTitle.find(" ");
     TEST_ASSERT_EQ(npos, std::string::npos);
     npos = fileTitle.find("*");
-    TEST_ASSERT(npos != std::string::npos);
+    CHECK(npos != std::string::npos);
 }
-
-TEST_MAIN(
-    TEST_CHECK(imageWriterThrowsOnFailedConstruction);
-    TEST_CHECK(constructValidImageWriter);
-    TEST_CHECK(changeFileHeader);
-    )

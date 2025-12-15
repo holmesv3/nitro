@@ -22,15 +22,10 @@
  */
 
 #include <import/nrt.h>
-#include "TestCase.h"
+#include <catch2/catch_test_macros.hpp>
 
-TEST_CASE(j2k_read_tile)
+TEST_CASE("j2k_read_tile")
 {
     /* placeholder */
-    TEST_ASSERT_TRUE(true);
+    SUCCEED();
 }
-
-TEST_MAIN(
-    TEST_CHECK(j2k_read_tile);
-    )
-

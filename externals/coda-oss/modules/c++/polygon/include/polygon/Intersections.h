@@ -27,7 +27,7 @@
 #include <cmath>
 
 #include <types/RowCol.h>
-#include <gsl/gsl.h>
+#include <gsl/gsl>
 
 namespace polygon
 {

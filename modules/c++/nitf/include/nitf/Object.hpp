@@ -27,7 +27,7 @@
 #include <assert.h>
 
 #include <type_traits>
-#include <std/cstddef> // std::byte
+#include <cstddef> // std::byte
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"

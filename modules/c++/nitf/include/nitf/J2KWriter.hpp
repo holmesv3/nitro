@@ -25,8 +25,8 @@
 #define NITF_J2KWriter_hpp_INCLUDED_
 #pragma once
 
-#include <std/filesystem>
-#include <std/span>
+#include <filesystem>
+#include <span>
 
 #include "config/compiler_extensions.h"
 
