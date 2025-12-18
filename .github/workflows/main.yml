@@ -15,18 +15,13 @@ jobs:
         configuration: [Release]
     name: ${{ matrix.os }}-CMake
     runs-on: ${{ matrix.os }}
-
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-      with:
-        python-version: '3.7'
     - name: configure
       run: |
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="3.7"
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }}
     - name: make
       run: |
         cd out
@@ -52,7 +47,6 @@ jobs:
         configuration: [Debug] # Debug turns on more compiler warnings
     name: ${{ matrix.os }}-msbuild
     runs-on: ${{ matrix.os }}
-
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure CODA-OSS
@@ -88,18 +82,17 @@ jobs:
         os: [ubuntu-latest]
     name: ${{ matrix.os }}-CMake
     runs-on: ${{ matrix.os }}
-
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
+    - name: Setup Cpp
+      uses: aminya/setup-cpp@v1 # https://github.com/marketplace/actions/setup-cpp-c-c
       with:
-        python-version: '3.7'
+          compiler: gcc-14
     - name: configure
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
+        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DCMAKE_BUILD_TYPE=Release ..
     - name: make
       run: |
         cd target-Release
