@@ -1,0 +1,91 @@
+name: build_unittest
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-cmake-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        configuration: [Debug, Release]
+    name: ${{ matrix.os }}-${{ matrix.configuration }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        ls env:
+        mkdir target && cd target
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github
+    - name: build
+      run: |
+        cmake --build target --config ${{ matrix.configuration }} -j 
+    - name: test # should run w/o install
+      run: |
+        ctest --test-dir target -C ${{ matrix.configuration }} --output-on-failure
+    - name: install
+      run: |
+        cmake --install target --config ${{ matrix.configuration }}
+
+  build-linux-cmake-default:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+    name: ${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: Setup Cpp
+      uses: aminya/setup-cpp@v1 # https://github.com/marketplace/actions/setup-cpp-c-c
+      with:
+          compiler: gcc-14
+    - name: configure
+      run: |
+        env
+        mkdir target && cd target
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github
+    - name: build
+      run: |
+        cmake --build target -j
+    - name: test
+    # should run w/o install
+      run: |
+        ctest --test-dir target --output-on-failure
+    - name: install
+      run: |
+        cmake --install target 
+
+  build-linux-cmake:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04]
+        configuration: [Debug, Release]
+        avx: [AVX512F]
+    name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: Setup Cpp
+      uses: aminya/setup-cpp@v1 # https://github.com/marketplace/actions/setup-cpp-c-c
+      with:
+          compiler: gcc-14
+    - name: configure
+      run: |
+        mkdir target && cd target
+        cmake .. -DENABLE_${{ matrix.avx }}=ON -DCMAKE_INSTALL_PREFIX=${{ matrix.configuration }} -DCMAKE_BUILD_TYPE=${{ matrix.configuration }}
+    - name: build
+      run: |
+        cmake --build target -j
+    - name: test
+      run: |
+        ctest --test-dir target --output-on-failure
